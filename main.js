@@ -1,4 +1,4 @@
-const { ItemView, Plugin, WorkspaceLeaf } = require('obsidian');
+const { ItemView, Plugin, WorkspaceLeaf, Notice } = require('obsidian');
 
 const VIEW_TYPE = 'crystal-todo-view';
 
@@ -13,11 +13,22 @@ class CrystalTodoPlugin extends Plugin {
   onunload() {}
 
   async activateView() {
-    const { workspace } = this.app;
-    const leaf = workspace.getLeavesOfType(VIEW_TYPE)[0];
-    if (leaf) { leaf.setActive(); return; }
-    const newLeaf = workspace.getLeaf('tab');
-    await newLeaf.setViewState({ type: VIEW_TYPE, active: true });
+    try {
+      const { workspace } = this.app;
+      const leaf = workspace.getLeavesOfType(VIEW_TYPE)[0];
+      if (leaf) {
+        if (leaf.view && leaf.view.contentEl && leaf.view.contentEl.children.length === 0) {
+          await leaf.view.onOpen();
+        }
+        workspace.setActiveLeaf(leaf);
+        return;
+      }
+      const newLeaf = workspace.getLeaf('tab');
+      await newLeaf.setViewState({ type: VIEW_TYPE, active: true });
+    } catch (e) {
+      new Notice('Crystal Todo 打开失败：' + (e && e.message ? e.message : e), 15000);
+      console.error('CrystalTodo activateView', e);
+    }
   }
 
   async persist(data) {
@@ -42,6 +53,7 @@ class CrystalTodoView extends ItemView {
   getIcon() { return 'gem'; }
 
   async onOpen() {
+    try {
     const root = this.contentEl;
     const pluginRef = this.plugin;
     const initialData = this.plugin.data;
@@ -461,9 +473,11 @@ function sync(){$('remaining').textContent=zones.reduce((a,z)=>a+z.blocks.length
       clearTimeout(persistTimer);
       pluginRef.persist(snapshot());
     });
-  
+    } catch (e) {
+      console.error('CrystalTodo onOpen', e);
+      new Notice('Crystal Todo 初始化失败：' + (e && e.message ? e.message : e), 15000);
+    }
   }
-
   async onClose() {
     this.cleanupFns.forEach(f => f());
     this.cleanupFns = [];
