@@ -1,0 +1,9 @@
+{
+  "id": "crystal-todo",
+  "name": "Crystal Todo",
+  "version": "1.0.0",
+  "minAppVersion": "1.0.0",
+  "description": "把待办变成晶莹剔透的水晶方块：不想干就锤它解气，做完了让它漂亮地消失，完成的宝石进今日战利品柜。",
+  "author": "Nerissa-xue",
+  "isDesktopOnly": true
+}
