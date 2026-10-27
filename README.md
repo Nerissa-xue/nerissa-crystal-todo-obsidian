@@ -1,5 +1,7 @@
 # Crystal Todo · 水晶待办（Obsidian 插件）
 
+> by Nerissa
+
 把待办变成晶莹剔透的水晶方块。不想干，就锤两下；做完了，让它漂亮地消失。完成的宝石会掉进「今日战利品」柜子里。
 
 Turn your todos into crystal-clear blocks. Don't feel like it? Bonk it a couple of times. Done? Let it disappear beautifully. Completed gems drop into your "Today's Trophies" case.
