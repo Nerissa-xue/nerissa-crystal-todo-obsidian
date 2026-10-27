@@ -14,13 +14,10 @@ class CrystalTodoPlugin extends Plugin {
 
   async activateView() {
     const { workspace } = this.app;
-    let leaf = workspace.getLeavesOfType(VIEW_TYPE)[0];
-    if (!leaf) {
-      const newLeaf = workspace.getRightLeaf(false);
-      if (newLeaf) await newLeaf.setViewState({ type: VIEW_TYPE, active: true });
-      leaf = workspace.getLeavesOfType(VIEW_TYPE)[0];
-    }
-    if (leaf) leaf.setActive();
+    const leaf = workspace.getLeavesOfType(VIEW_TYPE)[0];
+    if (leaf) { leaf.setActive(); return; }
+    const newLeaf = workspace.getLeaf('tab');
+    await newLeaf.setViewState({ type: VIEW_TYPE, active: true });
   }
 
   async persist(data) {
